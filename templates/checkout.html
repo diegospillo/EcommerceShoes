@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+<form method="post">
+    <h3>Indirizzo di spedizione</h3>
+    <label>Via<input type="text" name="via" required></label><br>
+    <label>Civico<input type="text" name="civico" required></label><br>
+    <label>CAP<input type="text" name="cap" required></label><br>
+    <label>Città<input type="text" name="citta" required></label><br>
+    <label>Provincia<input type="text" name="provincia" required></label><br>
+    <label>Nazione<input type="text" name="nazione" required></label><br>
+    <h3>Pagamento</h3>
+    <label>Metodo<input type="text" name="metodo_pagamento" required></label><br>
+    <button type="submit">Completa ordine</button>
+</form>
+{% endblock %}
