@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Prodotti{% endblock %}
+{% block content %}
+<h1>Prodotti</h1>
+<div class="prodotti">
+    {% for p in prodotti %}
+    <div class="prodotto">
+        <h2><a href="{{ url_for('main.product_detail', prod_id=p.id) }}">{{ p.nome }} {{ p.modello }}</a></h2>
+        <p>{{ p.marca }} - €{{ '%.2f'|format(p.prezzo) }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

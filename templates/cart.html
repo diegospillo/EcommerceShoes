@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Carrello{% endblock %}
+{% block content %}
+<h1>Il tuo carrello</h1>
+{% if carrello.elementi %}
+<table>
+<tr><th>Prodotto</th><th>Taglia</th><th>Quantità</th><th>Prezzo</th><th></th></tr>
+{% for e in carrello.elementi %}
+<tr>
+<td>{{ e.prodotto.nome }}</td>
+<td>{{ e.taglia }}</td>
+<td>{{ e.quantita }}</td>
+<td>€{{ '%.2f'|format(e.prodotto.prezzo * e.quantita) }}</td>
+<td><a href="{{ url_for('main.cart_remove', elem_id=e.id) }}">Rimuovi</a></td>
+</tr>
+{% endfor %}
+</table>
+<p>Totale: €{{ '%.2f'|format(sum(e.prodotto.prezzo * e.quantita for e in carrello.elementi)) }}</p>
+<a href="{{ url_for('main.checkout') }}">Procedi al checkout</a>
+{% else %}
+<p>Carrello vuoto</p>
+{% endif %}
+{% endblock %}
