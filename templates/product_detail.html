@@ -1,38 +1,64 @@
 {% extends 'base.html' %}
-{% block title %}{{ prodotto.nome }}{% endblock %}
-{% block content %}
-<h1>{{ prodotto.nome }} {{ prodotto.modello }}</h1>
-<p>Marca: {{ prodotto.marca }}</p>
-<p>Categoria: {{ prodotto.categoria }}</p>
-<p>Prezzo: €{{ '%.2f'|format(prodotto.prezzo) }}</p>
-{% for img in prodotto.immagini %}
-<img src="{{ img.url }}" alt="{{ prodotto.nome }}" width="200">
-{% endfor %}
-<form method="post" action="{{ url_for('main.cart_add', prod_id=prodotto.id) }}">
-    <label>Taglia:
-        <select name="taglia">
-            {% for t in prodotto.taglie %}
-            <option value="{{ t.taglia }}">{{ t.taglia }}</option>
-            {% endfor %}
-        </select>
-    </label>
-    <label>Quantità:<input type="number" name="quantita" value="1"></label>
-    <button type="submit">Aggiungi al carrello</button>
-</form>
 
-<h2>Recensioni</h2>
-<ul>
-{% for r in prodotto.recensioni %}
-    <li>{{ r.voto }}/5 - {{ r.commento }}</li>
-{% endfor %}
-</ul>
-{% if session.get('user_id') %}
-<form method="post" action="{{ url_for('main.add_review', prod_id=prodotto.id) }}">
-    <label>Voto:<input type="number" name="voto" min="1" max="5" required></label>
-    <label>Commento:<br><textarea name="commento"></textarea></label>
-    <button type="submit">Invia</button>
-</form>
-{% else %}
-<p><a href="{{ url_for('main.login') }}">Effettua il login</a> per lasciare una recensione.</p>
-{% endif %}
+{% block title %}{{ prodotto.nome }}{% endblock %}
+
+{% block content %}
+<!-- Product Section -->
+<section id="collection" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4" style="margin-top: 50px;">{{ prodotto.nome }} {{ prodotto.modello }}</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                {% for img in prodotto.immagini %}
+                    <img src="{{ img.url }}" alt="{{ prodotto.nome }}" class="img-fluid mb-4" width="100%">
+                {% endfor %}
+            </div>
+            <div class="col-md-6">
+                <p>Marca: {{ prodotto.marca }}</p>
+                <p>Categoria: {{ prodotto.categoria }}</p>
+                <p>Prezzo: €{{ '%.2f'|format(prodotto.prezzo) }}</p>
+
+                <form method="post" action="{{ url_for('main.cart_add', prod_id=prodotto.id) }}">
+                    <label>Taglia:
+                        <select name="taglia" class="form-select mb-3">
+                            {% for t in prodotto.taglie %}
+                            <option value="{{ t.taglia }}">{{ t.taglia }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>Quantità:
+                        <input type="number" name="quantita" value="1" class="form-control mb-3">
+                    </label>
+                    <button type="submit" class="btn btn-dark">Aggiungi al carrello</button>
+                </form>
+
+                <h3 class="mt-4">Recensioni</h3>
+                <ul>
+                {% for r in prodotto.recensioni %}
+                    <li>{{ r.voto }}/5 - {{ r.commento }}</li>
+                {% endfor %}
+                </ul>
+
+                {% if session.get('user_id') %}
+                <form method="post" action="{{ url_for('main.add_review', prod_id=prodotto.id) }}" class="needs-validation">
+                    <div class="mb-3">
+                        <label for="voto" class="form-label">Voto</label>
+                        <input type="number" name="voto" id="voto" min="1" max="5" required class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="commento" class="form-label">Commento</label>
+                        <textarea name="commento" id="commento" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark">Invia</button>
+                </form>
+
+                {% else %}
+                <p><a href="{{ url_for('main.login') }}">Effettua il login</a> per lasciare una recensione.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

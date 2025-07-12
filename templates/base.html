@@ -2,32 +2,86 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Ecommerce Scarpe{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FootWearX - Le scarpe che parlano di te</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-<nav>
-    <a href="{{ url_for('main.index') }}">Home</a>
-    {% if session.get('user_id') %}
-    <a href="{{ url_for('main.cart_view') }}">Carrello</a>
-    <a href="{{ url_for('main.logout') }}">Logout</a>
-    {% else %}
-    <a href="{{ url_for('main.login') }}">Login</a>
-    <a href="{{ url_for('main.register') }}">Registrati</a>
-    {% endif %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">FootWearX</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contatti</a>
+                </li>
+                <!-- Login/Logout -->
+                {% if session.get('user_id') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.login') }}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+                <!-- Icona carrello, spostata a destra e ingrandita -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.cart_view') }}" style="font-size: 1.5rem;">
+                        <i class="bi bi-cart-fill"></i> <!-- Icona carrello -->
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class="flash">
-      {% for msg in messages %}<li>{{ msg }}</li>{% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
 
-<div class="content">
-{% block content %}{% endblock %}
-</div>
+    <div class="content">
+          {% block content %}{% endblock %}
+    </div>
+
+    <!-- Newsletter Section -->
+    <section id="contact" class="newsletter py-5 text-white text-center">
+        <div class="container">
+            <h3 class="mb-3">Resta aggiornato sulle novità</h3>
+            <p class="mb-4">Iscriviti alla nostra newsletter per ricevere offerte esclusive e le ultime notizie.</p>
+            <form class="row g-2 justify-content-center">
+                <div class="col-auto">
+                    <input type="email" class="form-control" id="email" placeholder="Inserisci la tua email">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-light">Iscriviti</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>Seguici sui social</p>
+            <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i> Instagram</a>
+            <a href="#" class="text-white"><i class="bi bi-facebook"></i> Facebook</a>
+            <p class="mt-3 mb-0">&copy; 2023 FootWearX - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/script.js"></script>
 </body>
 </html>

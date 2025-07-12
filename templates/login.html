@@ -1,10 +1,45 @@
 {% extends 'base.html' %}
+
 {% block title %}Login{% endblock %}
+
 {% block content %}
-<h1>Login</h1>
-<form method="post">
-    <label>Email<input type="email" name="email" required></label><br>
-    <label>Password<input type="password" name="password" required></label><br>
-    <button type="submit">Login</button>
-</form>
+<!-- Hero Section for Login -->
+<header class="hero d-flex align-items-center text-center text-white" style="background: url('https://picsum.photos/seed/login/1600/900') center/cover no-repeat; min-height: 100vh;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Accedi al tuo Account</h1>
+        <p class="lead">Benvenuto, inserisci le tue credenziali per continuare.</p>
+    </div>
+</header>
+
+<!-- Login Form Section -->
+<section class="py-5" style="background-color: #f7f7f7;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Accedi</h3>
+                        <form method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100 mt-3">Login</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <p>Non hai un account? <a href="{{ url_for('main.register') }}">Registrati</a></p>
+                            <p><a href="">Hai dimenticato la password?</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
+

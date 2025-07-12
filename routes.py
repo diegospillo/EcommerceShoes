@@ -57,6 +57,7 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        print(email,password)
         user = Utente.query.filter_by(email=email).first()
         if user and user.check_password(password):
             session['user_id'] = user.id
@@ -79,7 +80,9 @@ def cart_view():
         flash('Devi effettuare il login')
         return redirect(url_for('main.login'))
     cart = get_or_create_cart(session['user_id'])
-    return render_template('cart.html', carrello=cart)
+    totale = sum(e.prodotto.prezzo * e.quantita for e in cart.elementi)
+    return render_template('cart.html', carrello=cart, totale=totale)
+
 
 
 @bp.route('/cart/add/<int:prod_id>', methods=['POST'])

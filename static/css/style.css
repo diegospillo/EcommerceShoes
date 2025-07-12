@@ -1,10 +1,27 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
-nav a {
-    margin-right: 10px;
+
+.hero {
+    background: url('https://picsum.photos/seed/hero/1600/900') center/cover no-repeat;
+    min-height: 100vh;
+    padding-top: 70px; /* offset for fixed navbar */
+    position: relative;
+    z-index: 1;
+    color: #fff;
 }
-.flash {
-    color: red;
+
+.newsletter {
+    background-color: #000;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
 }

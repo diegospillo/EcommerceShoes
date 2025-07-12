@@ -1,13 +1,33 @@
 {% extends 'base.html' %}
 {% block title %}Prodotti{% endblock %}
 {% block content %}
-<h1>Prodotti</h1>
-<div class="prodotti">
-    {% for p in prodotti %}
-    <div class="prodotto">
-        <h2><a href="{{ url_for('main.product_detail', prod_id=p.id) }}">{{ p.nome }} {{ p.modello }}</a></h2>
-        <p>{{ p.marca }} - €{{ '%.2f'|format(p.prezzo) }}</p>
-    </div>
-    {% endfor %}
-</div>
+    <!-- Hero Section -->
+    <header class="hero d-flex align-items-center text-center text-white">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Le scarpe che parlano di te</h1>
+            <p class="lead">Scopri il comfort e lo stile della nostra nuova collezione</p>
+            <a href="#collection" class="btn btn-outline-light btn-lg mt-3" style="position: relative; z-index: 3;">Scopri la collezione</a>
+        </div>
+    </header>     
+    <!-- Product Section -->
+    <section id="collection" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">La nostra Collezione</h2>
+            <div class="row g-4">
+                {% for p in prodotti %}
+                <!-- Product Card -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card h-100 text-center">
+                        <img src="{{ p.immagini[0].url }}" class="card-img-top" alt="Scarpa 1">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ p.nome }} {{ p.modello }}</h5>
+                            <p class="card-text text-muted mb-4">{{ p.marca }} - €{{ '%.2f'|format(p.prezzo) }}</p>
+                            <a href="{{ url_for('main.product_detail', prod_id=p.id) }}" class="btn btn-dark mt-auto">Acquista</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 {% endblock %}

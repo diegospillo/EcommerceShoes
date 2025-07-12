@@ -1,23 +1,52 @@
 {% extends 'base.html' %}
+
 {% block title %}Carrello{% endblock %}
+
 {% block content %}
-<h1>Il tuo carrello</h1>
-{% if carrello.elementi %}
-<table>
-<tr><th>Prodotto</th><th>Taglia</th><th>Quantità</th><th>Prezzo</th><th></th></tr>
-{% for e in carrello.elementi %}
-<tr>
-<td>{{ e.prodotto.nome }}</td>
-<td>{{ e.taglia }}</td>
-<td>{{ e.quantita }}</td>
-<td>€{{ '%.2f'|format(e.prodotto.prezzo * e.quantita) }}</td>
-<td><a href="{{ url_for('main.cart_remove', elem_id=e.id) }}">Rimuovi</a></td>
-</tr>
-{% endfor %}
-</table>
-<p>Totale: €{{ '%.2f'|format(sum(e.prodotto.prezzo * e.quantita for e in carrello.elementi)) }}</p>
-<a href="{{ url_for('main.checkout') }}">Procedi al checkout</a>
-{% else %}
-<p>Carrello vuoto</p>
-{% endif %}
+<!-- Hero Section for Cart -->
+<header class="hero d-flex align-items-center text-center text-white" style="background: url('https://picsum.photos/seed/cart/1600/900') center/cover no-repeat; min-height: 100vh;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Il tuo Carrello</h1>
+        <p class="lead">Controlla i tuoi prodotti e procedi al checkout.</p>
+    </div>
+</header>
+
+<!-- Cart Table Section -->
+<section class="py-5" style="background-color: #f7f7f7;">
+    <div class="container">
+        {% if carrello.elementi %}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Prodotto</th>
+                    <th>Taglia</th>
+                    <th>Quantità</th>
+                    <th>Prezzo</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in carrello.elementi %}
+                <tr>
+                    <td>{{ e.prodotto.nome }}</td>
+                    <td>{{ e.taglia }}</td>
+                    <td>{{ e.quantita }}</td>
+                    <td>€{{ '%.2f'|format(e.prodotto.prezzo * e.quantita) }}</td>
+                    <td>
+                        <a href="{{ url_for('main.cart_remove', elem_id=e.id) }}" class="btn btn-danger btn-sm">Rimuovi</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between">
+            <h3>Totale: €{{ '%.2f'|format(totale) }}</h3>
+            <a href="{{ url_for('main.checkout') }}" class="btn btn-success">Procedi al checkout</a>
+        </div>
+        {% else %}
+        <p class="text-center">Il carrello è vuoto. <a href="{{ url_for('main.index') }}">Continua a fare shopping</a>.</p>
+        {% endif %}
+    </div>
+</section>
+
 {% endblock %}

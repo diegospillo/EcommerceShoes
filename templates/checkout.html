@@ -1,17 +1,65 @@
 {% extends 'base.html' %}
+
 {% block title %}Checkout{% endblock %}
+
 {% block content %}
-<h1>Checkout</h1>
-<form method="post">
-    <h3>Indirizzo di spedizione</h3>
-    <label>Via<input type="text" name="via" required></label><br>
-    <label>Civico<input type="text" name="civico" required></label><br>
-    <label>CAP<input type="text" name="cap" required></label><br>
-    <label>Città<input type="text" name="citta" required></label><br>
-    <label>Provincia<input type="text" name="provincia" required></label><br>
-    <label>Nazione<input type="text" name="nazione" required></label><br>
-    <h3>Pagamento</h3>
-    <label>Metodo<input type="text" name="metodo_pagamento" required></label><br>
-    <button type="submit">Completa ordine</button>
-</form>
+<!-- Hero Section for Checkout -->
+<header class="hero d-flex align-items-center text-center text-white" style="background: url('https://picsum.photos/seed/checkout/1600/900') center/cover no-repeat; min-height: 100vh;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Completa il tuo ordine</h1>
+        <p class="lead">Fornisci i dettagli per il pagamento e la spedizione per finalizzare l'acquisto.</p>
+    </div>
+</header>
+
+<!-- Checkout Form Section -->
+<section class="py-5" style="background-color: #f7f7f7;">
+    <div class="container">
+        <form method="post">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Indirizzo di spedizione</h3>
+                    <div class="mb-3">
+                        <label for="via" class="form-label">Via</label>
+                        <input type="text" class="form-control" id="via" name="via" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="civico" class="form-label">Civico</label>
+                        <input type="text" class="form-control" id="civico" name="civico" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cap" class="form-label">CAP</label>
+                        <input type="text" class="form-control" id="cap" name="cap" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="citta" class="form-label">Città</label>
+                        <input type="text" class="form-control" id="citta" name="citta" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="provincia" class="form-label">Provincia</label>
+                        <input type="text" class="form-control" id="provincia" name="provincia" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nazione" class="form-label">Nazione</label>
+                        <input type="text" class="form-control" id="nazione" name="nazione" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Metodo di pagamento</h3>
+                    <div class="mb-3">
+                        <label for="metodo_pagamento" class="form-label">Metodo</label>
+                        <input type="text" class="form-control" id="metodo_pagamento" name="metodo_pagamento" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success btn-lg">Completa ordine</button>
+            </div>
+        </form>
+    </div>
+</section>
+
 {% endblock %}

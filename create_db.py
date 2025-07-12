@@ -1,7 +1,6 @@
 from app import create_app
 from models import db, Utente, Prodotto, TagliaProdotto, ImmagineProdotto
 
-
 def populate():
     # Crea alcuni prodotti di esempio
     p1 = Prodotto(nome='Runner', marca='Nike', modello='Air Zoom', categoria='running', prezzo=120.0, descrizione='Scarpe da running leggere.')
@@ -13,7 +12,7 @@ def populate():
     for p in [p1, p2]:
         for t in taglie:
             db.session.add(TagliaProdotto(prodotto_id=p.id, taglia=t, quantita=10))
-        db.session.add(ImmagineProdotto(prodotto_id=p.id, url='https://via.placeholder.com/300'))
+        db.session.add(ImmagineProdotto(prodotto_id=p.id, url='https://martinvalen.com/27402-mv_large_default/uomo-coronate-suola-alta-sneakers-scarpe-bianco-nero.jpg'))
     db.session.commit()
 
     # crea admin
