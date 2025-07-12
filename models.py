@@ -12,7 +12,7 @@ class Utente(db.Model):
     nome = db.Column(db.String(64), nullable=False)
     cognome = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
     telefono = db.Column(db.String(30))
     data_registrazione = db.Column(db.DateTime, default=datetime.utcnow)
     ruolo = db.Column(db.String(20), default='cliente')

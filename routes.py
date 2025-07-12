@@ -57,7 +57,6 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        print(email,password)
         user = Utente.query.filter_by(email=email).first()
         if user and user.check_password(password):
             session['user_id'] = user.id
