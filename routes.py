@@ -63,6 +63,7 @@ def login():
         if user and user.check_password(password):
             session['user_id'] = user.id
             session['user'] = user.email
+            session['ruolo'] = user.ruolo
             session['gender'] = user.gender
             session['source'] = "Google"
             flash('Login effettuato')
@@ -75,6 +76,9 @@ def login():
 def logout():
     session.pop('user_id', None)
     session.pop('user', None)
+    session.pop('ruolo', None)
+    session.pop('gender', None)
+    session.pop('source', None)
     flash('Logout effettuato')
     return redirect(url_for('main.index'))
 
@@ -188,7 +192,7 @@ def add_review(prod_id):
 
 @bp.route('/admin')
 def admin_dashboard():
-    if 'user' not in session:
+    if 'user' not in session or session['ruolo'] != "admin":
         flash('Devi effettuare il login')
         return redirect(url_for('main.login'))
 

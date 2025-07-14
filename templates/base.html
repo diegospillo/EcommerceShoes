@@ -26,7 +26,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#contact">Contatti</a>
                 </li>
-                {% if session.get('user') %}
+                {% if session.get('ruolo')=="admin" %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.admin_dashboard') }}">Admin</a>
                 </li>
