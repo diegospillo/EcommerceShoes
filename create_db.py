@@ -1,5 +1,5 @@
 from app import create_app
-from models import db, Utente, Prodotto, TagliaProdotto, ImmagineProdotto
+from models import db, Utente, Prodotto, TagliaProdotto, ImmagineProdotto, Sale
 
 def populate():
     # Crea alcuni prodotti di esempio
@@ -20,6 +20,31 @@ def populate():
     admin.set_password('admin')
     admin.ruolo = 'admin'
     db.session.add(admin)
+    db.session.commit()
+
+    # dati di vendita fittizi
+    import random
+    from datetime import datetime, timedelta
+
+    categories = ['running', 'casual', 'eleganti']
+    genders = ['uomo', 'donna']
+    sources = ['Instagram', 'Newsletter', 'Facebook', 'Google']
+    start_date = datetime.now() - timedelta(days=120)
+    sales_entries = []
+    for _ in range(100):
+        delta = random.randint(0, 120)
+        ts = start_date + timedelta(days=delta, hours=random.randint(0, 23))
+        sales_entries.append(
+            Sale(
+                product_name=random.choice(['Runner', 'Classic']),
+                category=random.choice(categories),
+                price=random.uniform(70, 150),
+                gender=random.choice(genders),
+                timestamp=ts,
+                source=random.choice(sources),
+            )
+        )
+    db.session.add_all(sales_entries)
     db.session.commit()
 
 

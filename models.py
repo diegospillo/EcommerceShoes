@@ -14,6 +14,7 @@ class Utente(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     telefono = db.Column(db.String(30))
+    gender = db.Column(db.String(30))
     data_registrazione = db.Column(db.DateTime, default=datetime.utcnow)
     ruolo = db.Column(db.String(20), default='cliente')
 
@@ -125,3 +126,15 @@ class Recensione(db.Model):
     voto = db.Column(db.Integer)
     commento = db.Column(db.Text)
     data = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Sale(db.Model):
+    """Simple sales table used for the admin dashboard."""
+
+    __tablename__ = 'sales'
+    id = db.Column(db.Integer, primary_key=True)
+    product_name = db.Column(db.String(120))
+    category = db.Column(db.String(64))
+    price = db.Column(db.Float)
+    gender = db.Column(db.String(20))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    source = db.Column(db.String(64))

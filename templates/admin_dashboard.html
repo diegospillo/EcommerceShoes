@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4" style="margin-top: 70px;">Dashboard Amministratore</h2>
+    <form id="filters" class="row g-2 mb-4">
+        <div class="col-md-3">
+            <select class="form-select" id="monthFilter">
+                <option value="">Tutti i mesi</option>
+                {% for m in months %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="categoryFilter">
+                <option value="">Tutte le categorie</option>
+                {% for c in categories %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="genderFilter">
+                <option value="">Tutti i generi</option>
+                {% for g in genders %}<option value="{{ g }}">{{ g }}</option>{% endfor %}
+            </select>
+        </div>
+    </form>
+    <div class="row mb-4">
+        <div class="col-md-6"><canvas id="categoryChart"></canvas></div>
+        <div class="col-md-6"><canvas id="genderChart"></canvas></div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-8"><canvas id="monthlyChart"></canvas></div>
+        <div class="col-md-4"><canvas id="sourceChart"></canvas></div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h5>Acquisti per giorno/ora</h5>
+            <table class="table table-bordered" id="heatmapTable">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+{% endblock %}

@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, Utente, Prodotto, TagliaProdotto, ImmagineProdotto, Carrello, ElementoCarrello, Indirizzo, Ordine, ProdottiOrdine, Recensione
+from models import db, Utente, Prodotto, TagliaProdotto, ImmagineProdotto, Carrello, ElementoCarrello, Indirizzo, Ordine, ProdottiOrdine, Recensione, Sale
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 bp = Blueprint('main', __name__)
 
@@ -43,6 +44,7 @@ def register():
             cognome=request.form['cognome'],
             email=email,
             telefono=request.form.get('telefono'),
+            gender=request.form['gender'],
         )
         utente.set_password(request.form['password'])
         db.session.add(utente)
@@ -60,6 +62,9 @@ def login():
         user = Utente.query.filter_by(email=email).first()
         if user and user.check_password(password):
             session['user_id'] = user.id
+            session['user'] = user.email
+            session['gender'] = user.gender
+            session['source'] = "Google"
             flash('Login effettuato')
             return redirect(url_for('main.index'))
         flash('Credenziali errate')
@@ -69,6 +74,7 @@ def login():
 @bp.route('/logout')
 def logout():
     session.pop('user_id', None)
+    session.pop('user', None)
     flash('Logout effettuato')
     return redirect(url_for('main.index'))
 
@@ -146,6 +152,15 @@ def checkout():
                 quantita=e.quantita,
                 prezzo_unitario=e.prodotto.prezzo,
             )
+            for _ in range(e.quantita):
+                s = Sale(
+                    product_name=e.prodotto.nome,
+                    category=e.prodotto.categoria,
+                    price=e.prodotto.prezzo,
+                    gender=session['gender'],
+                    source=session['source'],
+                )
+                db.session.add(s)
             db.session.add(po)
         ElementoCarrello.query.filter_by(carrello_id=cart.id).delete()
         db.session.commit()
@@ -169,3 +184,64 @@ def add_review(prod_id):
     db.session.commit()
     flash('Recensione aggiunta')
     return redirect(url_for('main.product_detail', prod_id=prod_id))
+
+
+@bp.route('/admin')
+def admin_dashboard():
+    if 'user' not in session:
+        flash('Devi effettuare il login')
+        return redirect(url_for('main.login'))
+
+    months = [m[0].strftime('%Y-%m') for m in db.session.query(db.func.date_trunc('month', Sale.timestamp)).distinct().all()]
+    categories = [c[0] for c in db.session.query(Sale.category).distinct().all()]
+    genders = [g[0] for g in db.session.query(Sale.gender).distinct().all()]
+
+    return render_template('admin_dashboard.html', months=months, categories=categories, genders=genders)
+
+
+@bp.route('/admin/data')
+def admin_data():
+    if 'user' not in session:
+        return {'error': 'unauthorized'}, 401
+
+    month = request.args.get('month')
+    category = request.args.get('category')
+    gender = request.args.get('gender')
+
+    filters = []
+    if month:
+        start = datetime.strptime(month, '%Y-%m')
+        end = start.replace(day=1) + relativedelta(months=1)
+        filters.append(Sale.timestamp >= start)
+        filters.append(Sale.timestamp < end)
+    if category:
+        filters.append(Sale.category == category)
+    if gender:
+        filters.append(Sale.gender == gender)
+
+    def query_group(field):
+        q = db.session.query(field, db.func.count(Sale.id)).filter(*filters).group_by(field).all()
+        labels = [str(r[0]) for r in q]
+        data = [r[1] for r in q]
+        return {'labels': labels, 'data': data}
+
+    category_data = query_group(Sale.category)
+    gender_data = query_group(Sale.gender)
+
+    month_q = db.session.query(db.func.to_char(db.func.date_trunc('month', Sale.timestamp), 'YYYY-MM'), db.func.count(Sale.id)).filter(*filters).group_by(db.func.date_trunc('month', Sale.timestamp)).order_by(db.func.date_trunc('month', Sale.timestamp)).all()
+    monthly = {'labels': [r[0] for r in month_q], 'data': [r[1] for r in month_q]}
+
+    source_data = query_group(Sale.source)
+
+    heat_q = db.session.query(db.func.extract('dow', Sale.timestamp).label('d'),
+                              db.func.extract('hour', Sale.timestamp).label('h'),
+                              db.func.count(Sale.id)).filter(*filters).group_by('d', 'h').all()
+    heatmap = [{'dow': int(r[0]), 'hour': int(r[1]), 'count': r[2]} for r in heat_q]
+
+    return {
+        'category': category_data,
+        'gender': gender_data,
+        'monthly': monthly,
+        'source': source_data,
+        'heatmap': heatmap,
+    }
